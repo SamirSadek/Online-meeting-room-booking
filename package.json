@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "seed": "ts-node scripts/seed.ts"
+    
   },
   "dependencies": {
     "@alloc/quick-lru": "^5.2.0",
