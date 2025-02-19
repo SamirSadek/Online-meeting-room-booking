@@ -1,16 +1,14 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
+import { ClerkProvider } from "@clerk/nextjs";
+import EnsureUserInDB  from "@/app/provider";
+import QueryProvider from "./queryProvider";
+import Navbar from "@/components/ui/Header/Navbar";
+import { Inter } from "next/font/google";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
@@ -24,12 +22,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
+    <ClerkProvider>
+      <EnsureUserInDB>
+        <QueryProvider>
+      <html lang="en">
+        <body
+          className={`${inter.variable} antialiased `}
+        >
+          <Navbar/>
+          <div>
+          {children}
+
+          </div>
+        </body>
+      </html>
+      </QueryProvider>
+      </EnsureUserInDB>
+    </ClerkProvider>
   );
 }

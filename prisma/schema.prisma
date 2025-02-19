@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid()) // Clerk User ID
+  email     String   @unique
+  name      String?
+  imageUrl  String?
+  role      Role     @default(USER) // User roles: ADMIN or USER
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  bookings Booking[]
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model Room {
+  id        String    @id @default(cuid())
+  name      String
+  capacity  Int
+  amenities Json
+  imageUrl  String? // Room image
+  bookings  Booking[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Booking {
+  id          String   @id @default(cuid())
+  roomId      String
+  room        Room     @relation(fields: [roomId], references: [id])
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  title       String
+  description String?
+  startTime   DateTime
+  endTime     DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([roomId, startTime, endTime]) // Prevent double booking
+  @@index([roomId])
+  @@index([userId])
+}
