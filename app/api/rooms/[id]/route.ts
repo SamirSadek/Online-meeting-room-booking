@@ -105,7 +105,7 @@ export async function PUT(
         capacity: parsedCapacity,
         amenities: Array.isArray(amenities)
           ? amenities
-          : amenities.split(",").map((a) => a.trim()),
+          : amenities.split(",").map((a:string) => a.trim()),
         imageUrl,
       },
     });
