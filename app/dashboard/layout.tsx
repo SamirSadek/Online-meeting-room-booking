@@ -7,7 +7,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <Sidebar/>
   
         {/* Main Content */}
-        <div className="flex h-screen items-center justify-center w-3/4  bg-orange-50 mx-auto ">
+        <div className="flex h-screen items-center justify-center w-3/4  mx-auto ">
             {children}
         </div>
       </div>

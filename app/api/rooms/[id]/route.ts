@@ -58,6 +58,19 @@ export async function DELETE(req: Request) {
       );
     }
 
+    // Check if the room is being used in any bookings or other related records
+    const roomBookings = await prisma.booking.findMany({
+      where: { roomId: id },
+    });
+
+    if (roomBookings.length > 0) {
+      return NextResponse.json(
+        { error: "Cannot delete room, it has associated bookings" },
+        { status: 400 }
+      );
+    }
+
+    // Proceed to delete the room
     const deletedRoom = await prisma.room.delete({
       where: { id },
     });
@@ -74,6 +87,7 @@ export async function DELETE(req: Request) {
     );
   }
 }
+
 
 // ✅ Handle PUT request to update room
 export async function PUT(
@@ -97,7 +111,7 @@ export async function PUT(
       return NextResponse.json({ error: "Invalid capacity" }, { status: 400 });
     }
 
-    // ✅ Update Room in Database
+    //  Update Room in Database
     const updatedRoom = await prisma.room.update({
       where: { id: roomId },
       data: {

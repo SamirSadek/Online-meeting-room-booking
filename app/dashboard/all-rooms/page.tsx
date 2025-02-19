@@ -42,7 +42,7 @@ export default function Rooms() {
   if (isLoading) return <p>Loading rooms...</p>;
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-6 max-w-7xl mx-auto p-5 pt-36">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-6 max-w-7xl mx-auto p-5 mt-40">
       {rooms?.map((room) => (
         <div
           key={room.id}
