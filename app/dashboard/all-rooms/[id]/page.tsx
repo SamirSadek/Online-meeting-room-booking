@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -9,8 +9,10 @@ import { useRouter } from "next/navigation";
 // ✅ Define Room Schema with Proper Type Validation
 const roomSchema = z.object({
   name: z.string().min(3, "Room name is required"),
-  capacity: z
-    .preprocess((val) => Number(val), z.number().min(1, "Capacity must be at least 1")),
+  capacity: z.preprocess(
+    (val) => Number(val),
+    z.number().min(1, "Capacity must be at least 1")
+  ),
   amenities: z.string().optional(),
   imageUrl: z.string().url("Invalid image URL").optional(),
 });
@@ -32,7 +34,12 @@ export default function UpdateRoom({ params }: { params: { id: string } }) {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const router = useRouter();
 
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm({
     resolver: zodResolver(roomSchema),
   });
 
@@ -49,7 +56,7 @@ export default function UpdateRoom({ params }: { params: { id: string } }) {
 
         // ✅ Set Form Default Values
         setValue("name", data.name);
-        setValue("capacity", data.capacity.toString());
+        setValue("capacity", data.capacity);
         setValue("amenities", data.amenities.join(", "));
         setValue("imageUrl", data.imageUrl ?? "");
       } catch (err: any) {
@@ -75,7 +82,8 @@ export default function UpdateRoom({ params }: { params: { id: string } }) {
         { method: "POST", body: formData }
       );
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error?.message || "Image upload failed");
+      if (!res.ok)
+        throw new Error(data.error?.message || "Image upload failed");
 
       return data.secure_url;
     } catch (err: any) {
@@ -109,7 +117,9 @@ export default function UpdateRoom({ params }: { params: { id: string } }) {
         body: JSON.stringify({
           ...data,
           capacity: Number(data.capacity), // Ensure capacity is a number
-          amenities: data.amenities ? data.amenities.split(",").map(a => a.trim()) : [],
+          amenities: data.amenities
+            ? data.amenities.split(",").map((a:string) => a.trim())
+            : [],
           imageUrl,
         }),
       });
@@ -141,8 +151,13 @@ export default function UpdateRoom({ params }: { params: { id: string } }) {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <label className="block text-sm font-medium">Room Name</label>
-            <input {...register("name")} className="w-full p-2 border rounded" />
-            {errors.name && <p className="text-red-500">{errors.name.message}</p>}
+            <input
+              {...register("name")}
+              className="w-full p-2 border rounded"
+            />
+            {errors.name && (
+              <p className="text-red-500">{errors.name.message}</p>
+            )}
           </div>
 
           <div>
@@ -152,13 +167,22 @@ export default function UpdateRoom({ params }: { params: { id: string } }) {
               {...register("capacity")}
               className="w-full p-2 border rounded"
             />
-            {errors.capacity && <p className="text-red-500">{errors.capacity.message}</p>}
+            {errors.capacity && (
+              <p className="text-red-500">{errors.capacity.message}</p>
+            )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium">Amenities (Comma separated)</label>
-            <input {...register("amenities")} className="w-full p-2 border rounded" />
-            {errors.amenities && <p className="text-red-500">{errors.amenities.message}</p>}
+            <label className="block text-sm font-medium">
+              Amenities (Comma separated)
+            </label>
+            <input
+              {...register("amenities")}
+              className="w-full p-2 border rounded"
+            />
+            {errors.amenities && (
+              <p className="text-red-500">{errors.amenities.message}</p>
+            )}
           </div>
 
           <div>
