@@ -1,11 +1,53 @@
+"use client"
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import prisma from "@/lib/prisma";
 import Link from "next/link";
 import { ArrowRight, Clock, Hospital, Users } from "lucide-react";
 import Image from "next/image";
+import axios from "axios";
 
-async function Rooms() {
-  const rooms = await prisma.room.findMany();
+// Define the Room type
+interface Room {
+  id: string;
+  name: string;
+  imageUrl?: string;
+  amenities: string[];
+  capacity: number;
+  updatedAt: string;
+}
+
+async function fetchRooms() {
+  try {
+    const response = await axios.get("/api/rooms"); 
+    return response.data;
+  } catch (err) {
+    throw new Error("Failed to fetch rooms");
+  }
+}
+
+const Rooms = () => {
+  const [rooms, setRooms] = useState<Room[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchRoomsData = async () => {
+      try {
+        const roomsData = await fetchRooms();
+        setRooms(roomsData);
+      } catch (err) {
+        setError("Failed to fetch rooms");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRoomsData();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div className="bg-orange-50 py-10">
@@ -59,7 +101,7 @@ async function Rooms() {
               <div className="flex gap-2 items-center">
                 <Clock className="w-4 h-4 text-gray-500" />
                 <p className="font-medium">
-                  Updated: {room.updatedAt.toLocaleString()}
+                  Updated: {new Date(room.updatedAt).toLocaleString()}
                 </p>
               </div>
             </div>
