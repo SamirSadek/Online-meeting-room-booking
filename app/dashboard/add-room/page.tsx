@@ -92,7 +92,7 @@ export default function AddRoomForm() {
           ...data,
           capacity: Number(data.capacity), // Ensure capacity is a number
           amenities: data.amenities
-            ? data.amenities.split(",").map((a) => a.trim())
+            ? data.amenities.split(",").map((a:string) => a.trim())
             : [],
           imageUrl,
         }),
