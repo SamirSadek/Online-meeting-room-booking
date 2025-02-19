@@ -11,7 +11,7 @@ interface Booking {
   title: string;
   startTime: string;
   endTime: string;
-  room: { name: string };
+  room: { name: string; imageUrl?: string };
 }
 
 export default function AllBookingsPage() {

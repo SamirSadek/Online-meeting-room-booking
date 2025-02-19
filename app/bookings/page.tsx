@@ -11,7 +11,7 @@ interface Booking {
   title: string;
   startTime: string;
   endTime: string;
-  room: { name: string };
+  room: { name: string; imageUrl?: string };
 }
 
 export default function BookingPage() {
@@ -189,7 +189,7 @@ export default function BookingPage() {
                     <div className="md:w-1/3 flex items-center justify-center">
                       <img
                         className="w-full h-[150px] rounded-lg object-cover shadow-md"
-                        src={booking.room.imageUrl}
+                        src={booking?.room?.imageUrl}
                         alt="Room Image"
                       />
                     </div>
