@@ -5,18 +5,18 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+  
 }
 
 model User {
-  id        String   @id @default(cuid()) // Clerk User ID
-  email     String   @unique
+  id        String    @id @default(cuid()) // Clerk User ID
+  email     String    @unique
   name      String?
   imageUrl  String?
-  role      Role     @default(USER) // User roles: ADMIN or USER
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  bookings Booking[]
+  role      Role      @default(USER) // User roles: ADMIN or USER
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  bookings  Booking[]
 }
 
 enum Role {
@@ -29,7 +29,7 @@ model Room {
   name      String
   capacity  Int
   amenities Json
-  imageUrl  String? // Room image
+  imageUrl  String? 
   bookings  Booking[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -48,7 +48,7 @@ model Booking {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  @@unique([roomId, startTime, endTime]) // Prevent double booking
+  @@unique([roomId, startTime, endTime]) 
   @@index([roomId])
   @@index([userId])
 }

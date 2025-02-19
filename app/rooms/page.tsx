@@ -25,7 +25,7 @@ async function Rooms() {
           >
             {/* Room Image */}
             <div className="rounded-lg overflow-hidden shadow-md">
-              {room.imageUrl && (
+              {room?.imageUrl && (
                 <Image
                   alt="Room Image"
                   className="object-cover object-center w-full h-64"
